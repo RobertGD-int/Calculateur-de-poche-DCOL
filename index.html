@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DCOL – Calculateur de M.A.</title>
+<style>
+[hidden]{display:none!important}
+:root{--bg:#f4f6fa;--card:#fff;--tx:#14213d;--mu:#5b6578;--ac:#1f4fd8;--ln:#d9dfea;--ontx:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#1a2233;--tx:#e8ecf5;--mu:#9aa6bd;--ac:#7aa2ff;--ln:#2c3750;--ontx:#0f1420}}
+:root[data-theme="dark"]{--bg:#0f1420;--card:#1a2233;--tx:#e8ecf5;--mu:#9aa6bd;--ac:#7aa2ff;--ln:#2c3750;--ontx:#0f1420}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:8px 12px;border-bottom:1px solid var(--ln)}
+button{font:inherit;cursor:pointer;color:var(--tx)}
+.nav{display:flex;gap:6px}.nav button{flex:1;padding:10px 4px;border-radius:10px;border:1px solid var(--ln);background:var(--card);font-weight:700}
+.nav .on,.chip.on,.seg .on{background:var(--ac);color:var(--ontx);border-color:var(--ac)}
+.nav .pdf{flex:none;padding:10px 14px;background:var(--ac);color:var(--ontx);border-color:var(--ac)}
+.tot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px}.lab{font-size:12px;color:var(--mu);display:block}
+#tg{display:block;font-size:28px;font-weight:800;color:var(--ac);line-height:1.1}#tk{color:var(--mu);font-size:13px}
+.alt{padding:9px 13px;border-radius:10px;border:1px solid var(--ln);background:var(--card);font-weight:700}
+#q{width:100%;margin-top:8px;font:inherit;padding:11px 12px;border-radius:10px;border:1px solid var(--ln);background:var(--card);color:var(--tx)}
+.chk{display:block;font-size:13px;color:var(--mu);margin-top:6px}
+main{max-width:680px;margin:0 auto;padding:10px 12px 24px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:12px}
+label.t{font-size:13px;color:var(--mu);display:block;margin-bottom:8px}
+.seg{display:flex;gap:8px;margin-bottom:12px}.seg button{flex:1;padding:11px 6px;border-radius:10px;border:1px solid var(--ln);background:var(--card);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{min-width:46px;padding:11px 0;text-align:center;border-radius:10px;border:1px solid var(--ln);background:var(--bg);font-weight:700}.chip.dr{min-width:0;padding:11px 12px}
+.note{font-size:12px;color:var(--mu);margin:8px 0 0}.link{background:none;border:0;color:var(--ac);padding:6px 0;margin-top:6px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--ln);font-size:14px}.row span:first-child{flex:1}.row b{white-space:nowrap}.num{color:var(--mu);white-space:nowrap}
+h2{display:flex;justify-content:space-between;gap:8px;font-size:15px;margin:16px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--ac)}h2 .s{font-weight:500;color:var(--mu);font-size:13px}
+.r{display:flex;align-items:center;gap:10px;padding:9px 10px;margin-bottom:6px;background:var(--card);border:1px solid var(--ln);border-radius:12px}
+.r.on{border-color:var(--ac)}.sw{flex:none;width:18px;height:18px;border-radius:50%;border:1px solid var(--mu)}
+.d{flex:1;min-width:0}.n{font-size:14px;font-weight:600;overflow-wrap:anywhere}.m{font-size:12px;color:var(--mu)}.lt{font-size:12px;color:var(--ac);font-weight:700;min-height:15px}.rt{white-space:nowrap;font-size:14px}
+.q{display:flex;align-items:center;gap:4px;flex:none}.q button{width:36px;height:36px;border-radius:9px;border:1px solid var(--ln);background:var(--bg);font-size:20px;font-weight:700;padding:0}
+.q input{width:52px;height:36px;text-align:center;font:inherit;font-weight:700;border-radius:9px;border:1px solid var(--ln);background:var(--card);color:var(--tx)}
+.none{color:var(--mu);text-align:center;margin-top:24px}
+@media print{.nav,.chips,.seg,.link,#sb,.alt,.q button{display:none}}
+</style></head><body>
+<header><div class="nav"><button id="t1" class="on">Calibers</button><button id="t2">Produits</button><button id="pdf" class="pdf">PDF</button></div>
+<div class="tot"><div><span class="lab" id="tl"></span><b id="tg">0 g</b><span id="tk"></span></div><button id="rz" class="alt">Effacer</button></div>
+<div id="sb" hidden><input id="q" type="search" placeholder="Part number ou terme de la description…" autocomplete="off"><label class="chk"><input type="checkbox" id="only"> Afficher seulement les quantités saisies</label></div></header>
+<main>
+<section id="p1">
+<div class="card"><label class="t">Directions du vent (sélection multiple)</label><div class="chips" id="dirs"></div></div>
+<div class="seg"><button id="ta">≥ 20 km/h<br><small>minuscules</small></button><button id="tb">≥ 42 km/h<br><small>MAJUSCULES</small></button></div>
+<div class="card"><label class="t" id="cl"></label><div class="chips" id="chips"></div><p class="note" id="nt"></p><button class="link" id="rzc">Réinitialiser selon les directions</button></div>
+<div class="card"><label class="t">Détail par barge</label><div id="shows"></div></div>
+<div class="card"><label class="t">Produits impactés</label><div id="list1"></div></div>
+</section>
+<section id="p2" hidden><div id="list2"></div></section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const P=[[901000098,"Sparkle Cannon / Gerb Mine 30mm",6,30,"","",""],[901000718,"20 MM ISHOT BLUE COMET",6.5,20,"4472C4","",""],[901000719,"20 MM ISHOT BLUE STARS MINE",4.5,20,"4472C4","",""],[901000720,"20 MM ISHOT GOLD GLITTER COMET 30M",6.5,20,"FFD966","",""],[901000721,"20 MM ISHOT GOLD GLITTER STARS MINE",4.5,20,"FFD966","",""],[901000722,"20 MM ISHOT ORANGE COMET",6.5,20,"ED7D31","",""],[901000723,"20 MM ISHOT RED COMET",6.5,20,"FF0000","",""],[901000724,"20 MM ISHOT RED STARS MINE",4.5,20,"FF0000","",""],[901000725,"20 MM ISHOT RED ULTRAFAST COMET (N/D) 15M",3.2,20,"FF0000","",""],[901000726,"20 MM ISHOT VIOLET ULTRAFAST COMET (N/D) 15M",3.2,20,"7030A0","",""],[901000727,"20 MM ISHOT WHITE COMET",6.5,20,"","",""],[901000728,"20 MM ISHOT WHITE SPANGLE CRACKER COMET + CRACKER STARS MINE",10,20,"","","CRK"],[901000729,"20 MM ISHOT WHITE SPANGLE CRACKER COMET 30M",6.5,20,"","",""],[901000730,"20 MM ISHOT WHITE STARS MINE",4.5,20,"","",""],[901000731,"20 MM ISHOT WHITE ULTRAFAST COMET (N/D) 15M",3.2,20,"","",""],[901000732,"20 MM ISHOT YELLOW COMET",6.5,20,"FFFF00","",""],[901000733,"30 MM ISHOT AQUA COMET + AQUA STARS MINE (N/D)",28,30,"00F5F5","",""],[901000734,"30 MM ISHOT AQUA STARS MINE (N/D) 22M",19.6,30,"00F5F5","",""],[901000735,"30 MM ISHOT BLUE COMET + RED STARS MINE (N/D)",28,30,"4472C4","FF0000",""],[901000736,"30 MM ISHOT BLUE STARS MINE (N/D)",19.6,30,"4472C4","",""],[901000737,"30 MM ISHOT GOLD GLITTER COMET + WHITE STROBE STARS MINE (N/D)",28,30,"FFD966","",""],[901000738,"30 MM ISHOT GOLD GLITTER STARS MINE (N/D)",19.6,30,"FFD966","",""],[901000739,"30 MM ISHOT GREEN STARS MINE (N/D)",19.6,30,"70AD47","",""],[901000740,"30 MM ISHOT RED COMET + BLUE STARS MINE (N/D)",28,30,"FF0000","4472C4",""],[901000741,"30 MM ISHOT RED STARS MINE (N/D)",19.6,30,"FF0000","",""],[901000742,"30 MM ISHOT RED TO GREEN COMET + BLUE STARS MINE (N/D)",28,30,"FF0000","70AD47",""],[901000743,"30 MM ISHOT VIOLET STARS MINE",19.6,30,"7030A0","",""],[901000744,"30 MM ISHOT WHITE & CRACKER STARS MINE (N/D)",19.6,30,"","","CRK"],[901000745,"30 MM ISHOT WHITE SPANGLE CRACKER COMET + CRACKER STARS MINE",28,30,"","","CRK"],[901000746,"30 MM ISHOT WHITE STROBE STARS MINE (N/D)",19.6,30,"","",""],[901000747,"30 MM ISHOT WHITE ULTRAFAST MINE (N/D)",18,30,"","",""],[901000748,"40 MM ISHOT BLUE STARS MINE (N/D)",45,40,"4472C4","",""],[901000749,"20 MM GOLD GLITTER STARS MINE",4.5,20,"FFD966","",""],[901000750,"20 MM RED STARS MINE",4.5,20,"FF0000","",""],[901000751,"20 MM RED ULTRAFAST COMET (N/D) 15M",3.2,20,"FF0000","",""],[901000752,"20 MM VIOLET ULTRAFAST COMET (N/D) 15M",3.2,20,"7030A0","",""],[901000753,"20 MM WHITE STARS MINE",4.5,20,"","",""],[901000754,"20 MM WHITE ULTRAFAST COMET (N/D) 15M",3.2,20,"","",""],[901000757,"Gerb GOLD (1s x 8m) (Barges & DUCKS N°2)",7.5,20,"FFD966","",""],[901000758,"Gerb ZIRCONIUM (1s x 11m)",7.5,20,"BFBFBF","",""],[901000759,"Gerb SILVER (1/2s x 8m) (DUCKS 4 & 6)",7.5,20,"BFBFBF","",""],[901000763,"Kleen Skyburst™ 50mm - Silverlace - Snowball w/Tail Stars",95.5,57,"FFFFFF","E9E9E9",""],[901000764,"Kleen Skyburst™ 50mm - White - Gold Strobe Stars",95.5,57,"FFFFFF","FBF29C",""],[901000755,"DUCKS N°1 · Gerb Gold - fontaine (10s x 5m)",30,"D","FFD966","",""],[901000757,"DUCKS N°2 · Gerb GOLD (1s x 8m)",7.5,"D","FFD966","",""],[901000756,"DUCKS N°3 · Gerb Gold - fontaine (15s x 5m)",30,"D","FFD966","",""],[901000759,"DUCKS N°4 · Gerb SILVER (1/2s x 8m)",7.5,"D","BFBFBF","",""],[901000262,"DUCKS N°5 · Photoflash White 30mm",3.74,"D","","",""],[901000759,"DUCKS N°6 · Gerb SILVER (1/2s x 8m)",7.5,"D","BFBFBF","",""]],C={"s":["RACER – L1 NE","LION – L3 SE","FROZEN – L2 SW","NAVY – L4 NW","VISION"],"a":[[0,"b",901000728,4],[0,"b",901000736,1],[0,"b",901000746,2],[0,"b",901000749,4],[0,"b",901000741,1],[0,"b",901000750,1],[0,"c",901000728,4],[0,"c",901000736,1],[0,"c",901000749,4],[0,"c",901000741,1],[0,"c",901000746,2],[0,"c",901000750,1],[1,"d",901000728,4],[1,"d",901000736,1],[1,"d",901000746,2],[1,"d",901000749,4],[1,"d",901000741,1],[1,"d",901000750,1],[1,"e",901000728,4],[1,"e",901000736,1],[1,"e",901000749,4],[1,"e",901000741,1],[1,"e",901000746,2],[1,"e",901000750,1],[2,"f",901000728,4],[2,"f",901000736,1],[2,"f",901000746,2],[2,"f",901000749,4],[2,"f",901000741,1],[2,"f",901000750,1],[2,"g",901000728,4],[2,"g",901000736,1],[2,"g",901000749,4],[2,"g",901000741,1],[2,"g",901000746,2],[2,"g",901000750,1],[3,"h",901000728,4],[3,"h",901000736,1],[3,"h",901000746,2],[3,"h",901000749,4],[3,"h",901000741,1],[3,"h",901000750,1],[3,"i",901000728,4],[3,"i",901000736,1],[3,"i",901000749,4],[3,"i",901000741,1],[3,"i",901000746,2],[3,"i",901000750,1],[4,"j",901000739,1],[4,"p",901000764,4],[4,"p",901000763,4],[4,"j",901000743,1],[4,"k",901000743,1],[4,"k",901000739,1],[4,"l",901000739,1],[4,"l",901000743,1],[4,"m",901000743,1],[4,"m",901000739,1]],"b":[[0,"B",901000718,1],[0,"B",901000720,11],[0,"B",901000722,6],[0,"B",901000723,7],[0,"B",901000732,3],[0,"B",901000721,3],[0,"B",901000728,4],[0,"B",901000730,1],[0,"B",901000734,3],[0,"B",901000736,1],[0,"B",901000746,2],[0,"B",901000747,3],[0,"B",901000749,4],[0,"B",901000757,3],[0,"B",901000758,3],[0,"B",901000759,3],[0,"B",901000737,6],[0,"B",901000744,3],[0,"B",901000745,2],[0,"B",901000748,3],[0,"B",901000751,2],[0,"B",901000754,2],[0,"B",901000719,1],[0,"B",901000725,2],[0,"B",901000741,1],[0,"B",901000750,1],[0,"C",901000718,1],[0,"C",901000720,11],[0,"C",901000722,6],[0,"C",901000723,7],[0,"C",901000732,3],[0,"C",901000758,3],[0,"C",901000759,3],[0,"C",901000721,3],[0,"C",901000728,4],[0,"C",901000730,1],[0,"C",901000734,3],[0,"C",901000736,1],[0,"C",901000747,3],[0,"C",901000737,6],[0,"C",901000744,3],[0,"C",901000745,2],[0,"C",901000748,3],[0,"C",901000757,3],[0,"C",901000749,4],[0,"C",901000751,2],[0,"C",901000754,2],[0,"C",901000719,1],[0,"C",901000725,2],[0,"C",901000741,1],[0,"C",901000746,2],[0,"C",901000750,1],[1,"D",901000718,1],[1,"D",901000720,11],[1,"D",901000722,6],[1,"D",901000723,7],[1,"D",901000732,3],[1,"D",901000721,3],[1,"D",901000728,4],[1,"D",901000730,1],[1,"D",901000734,3],[1,"D",901000736,1],[1,"D",901000746,2],[1,"D",901000747,3],[1,"D",901000749,4],[1,"D",901000757,3],[1,"D",901000758,3],[1,"D",901000759,3],[1,"D",901000737,6],[1,"D",901000744,3],[1,"D",901000745,2],[1,"D",901000748,3],[1,"D",901000751,2],[1,"D",901000754,2],[1,"D",901000719,1],[1,"D",901000725,2],[1,"D",901000741,1],[1,"D",901000750,1],[1,"E",901000718,1],[1,"E",901000720,11],[1,"E",901000722,6],[1,"E",901000723,7],[1,"E",901000732,3],[1,"E",901000758,3],[1,"E",901000759,3],[1,"E",901000721,3],[1,"E",901000728,4],[1,"E",901000730,1],[1,"E",901000734,3],[1,"E",901000736,1],[1,"E",901000747,3],[1,"E",901000737,6],[1,"E",901000744,3],[1,"E",901000745,2],[1,"E",901000748,3],[1,"E",901000757,3],[1,"E",901000749,4],[1,"E",901000751,2],[1,"E",901000754,2],[1,"E",901000719,1],[1,"E",901000725,2],[1,"E",901000741,1],[1,"E",901000746,2],[1,"E",901000750,1],[2,"F",901000718,1],[2,"F",901000720,8],[2,"F",901000722,6],[2,"F",901000723,7],[2,"F",901000732,3],[2,"F",901000721,3],[2,"F",901000728,4],[2,"F",901000730,1],[2,"F",901000734,3],[2,"F",901000736,1],[2,"F",901000746,2],[2,"F",901000747,3],[2,"F",901000749,4],[2,"F",901000757,3],[2,"F",901000758,3],[2,"F",901000759,3],[2,"F",901000737,6],[2,"F",901000744,3],[2,"F",901000745,2],[2,"F",901000748,3],[2,"F",901000729,3],[2,"F",901000751,2],[2,"F",901000754,2],[2,"F",901000719,1],[2,"F",901000725,2],[2,"F",901000741,1],[2,"F",901000750,1],[2,"G",901000718,1],[2,"G",901000720,8],[2,"G",901000722,6],[2,"G",901000723,7],[2,"G",901000732,3],[2,"G",901000758,3],[2,"G",901000759,3],[2,"G",901000721,3],[2,"G",901000728,4],[2,"G",901000730,1],[2,"G",901000734,3],[2,"G",901000736,1],[2,"G",901000747,3],[2,"G",901000737,6],[2,"G",901000744,3],[2,"G",901000745,2],[2,"G",901000748,3],[2,"G",901000729,3],[2,"G",901000757,3],[2,"G",901000749,4],[2,"G",901000751,2],[2,"G",901000754,2],[2,"G",901000719,1],[2,"G",901000725,2],[2,"G",901000741,1],[2,"G",901000746,2],[2,"G",901000750,1],[3,"H",901000718,1],[3,"H",901000720,8],[3,"H",901000722,6],[3,"H",901000723,7],[3,"H",901000732,3],[3,"H",901000721,3],[3,"H",901000728,4],[3,"H",901000730,1],[3,"H",901000734,3],[3,"H",901000736,1],[3,"H",901000746,2],[3,"H",901000747,3],[3,"H",901000749,4],[3,"H",901000757,3],[3,"H",901000758,3],[3,"H",901000759,3],[3,"H",901000737,6],[3,"H",901000744,3],[3,"H",901000745,2],[3,"H",901000748,3],[3,"H",901000729,3],[3,"H",901000751,2],[3,"H",901000754,2],[3,"H",901000719,1],[3,"H",901000725,2],[3,"H",901000741,1],[3,"H",901000750,1],[3,"I",901000718,1],[3,"I",901000720,8],[3,"I",901000722,6],[3,"I",901000723,7],[3,"I",901000732,3],[3,"I",901000758,3],[3,"I",901000759,3],[3,"I",901000721,3],[3,"I",901000728,4],[3,"I",901000730,1],[3,"I",901000734,3],[3,"I",901000736,1],[3,"I",901000747,3],[3,"I",901000737,6],[3,"I",901000744,3],[3,"I",901000745,2],[3,"I",901000748,3],[3,"I",901000729,3],[3,"I",901000757,3],[3,"I",901000749,4],[3,"I",901000751,2],[3,"I",901000754,2],[3,"I",901000719,1],[3,"I",901000725,2],[3,"I",901000741,1],[3,"I",901000746,2],[3,"I",901000750,1],[4,"J",901000733,1],[4,"J",901000742,3],[4,"J",901000734,2],[4,"J",901000739,1],[4,"J",901000752,2],[4,"J",901000753,1],[4,"J",901000757,1],[4,"J",901000718,1],[4,"J",901000735,1],[4,"J",901000736,1],[4,"J",901000737,5],[4,"J",901000724,1],[4,"J",901000726,2],[4,"J",901000738,2],[4,"J",901000098,4],[4,"J",901000764,1],[4,"J",901000763,1],[4,"J",901000723,1],[4,"J",901000727,1],[4,"J",901000731,1],[4,"J",901000743,1],[4,"K",901000733,1],[4,"K",901000742,3],[4,"K",901000734,2],[4,"K",901000743,1],[4,"K",901000752,2],[4,"K",901000753,1],[4,"K",901000757,1],[4,"K",901000718,1],[4,"K",901000737,5],[4,"K",901000740,1],[4,"K",901000741,1],[4,"K",901000719,1],[4,"K",901000726,2],[4,"K",901000738,2],[4,"K",901000098,4],[4,"K",901000764,1],[4,"K",901000763,1],[4,"K",901000723,1],[4,"K",901000727,1],[4,"K",901000731,1],[4,"K",901000739,1],[4,"L",901000733,1],[4,"L",901000742,3],[4,"L",901000734,2],[4,"L",901000739,1],[4,"L",901000752,2],[4,"L",901000753,1],[4,"L",901000757,1],[4,"L",901000718,1],[4,"L",901000735,1],[4,"L",901000736,1],[4,"L",901000737,5],[4,"L",901000724,1],[4,"L",901000726,2],[4,"L",901000738,2],[4,"L",901000098,4],[4,"L",901000764,1],[4,"L",901000763,1],[4,"L",901000723,1],[4,"L",901000727,1],[4,"L",901000731,1],[4,"L",901000743,1],[4,"M",901000733,1],[4,"M",901000742,3],[4,"M",901000734,2],[4,"M",901000743,1],[4,"M",901000752,2],[4,"M",901000753,1],[4,"M",901000757,1],[4,"M",901000718,1],[4,"M",901000737,5],[4,"M",901000740,1],[4,"M",901000741,1],[4,"M",901000719,1],[4,"M",901000726,2],[4,"M",901000738,2],[4,"M",901000098,4],[4,"M",901000764,1],[4,"M",901000763,1],[4,"M",901000723,1],[4,"M",901000727,1],[4,"M",901000731,1],[4,"M",901000739,1]]}; // P: [pn, description, M.A./u, groupe (calibre mm ou D), couleur 1, couleur 2, repère]
+const $=i=>document.getElementById(i);
+const fmt=(n,d=1)=>n.toLocaleString("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pf=(n,d=1)=>fmt(n,d).replace(new RegExp("["+String.fromCharCode(8239,160)+"]","g")," ");
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const MAP={"NORD":"ibm","NORD-EST":"bcmj","EST":"cdj","SUD-EST":"dejk","SUD":"fek","SUD-OUEST":"gflk","OUEST":"hgl","NORD-OUEST":"ihlm"};
+const LET={a:"bcdefghijklmp".split(""),b:"BCDEFGHIJKLM".split("")};
+const PM={};P.forEach(p=>{if(p[3]!=="D")PM[p[0]]=p});
+const bg=p=>p[4]?(p[5]?`linear-gradient(90deg,#${p[4]} 50%,#${p[5]} 50%)`:"#"+p[4]):"transparent";
+const G=[...new Set(P.map(p=>p[3]))].sort((a,b)=>(a==="D")-(b==="D")||(a==="D"?0:a-b)),gt=g=>g==="D"?"DUCKS":"Calibre "+g+" mm";
+let tab=1,mode="a";const on={a:new Set(),b:new Set()},ds=new Set();
+/* ---------- onglet Calibers ---------- */
+function auto(){on.a=new Set();on.b=new Set();ds.forEach(d=>{MAP[d].split("").forEach(l=>{on.a.add(l);on.b.add(l.toUpperCase())});on.a.add("p")})}
+function drawDirs(){const e=$("dirs");e.innerHTML="";Object.keys(MAP).forEach(d=>{const b=document.createElement("button");b.className="chip dr"+(ds.has(d)?" on":"");b.textContent=d;b.onclick=()=>{ds.has(d)?ds.delete(d):ds.add(d);auto();drawDirs();render1()};e.appendChild(b)})}
+function calc(m){const per=C.s.map(()=>[0,0]),q={};let tot=0,n=0;
+ C[m].forEach(([s,l,p,c])=>{if(!on[m].has(l))return;const x=PM[p][2]*c;per[s][0]+=x;per[s][1]+=c;tot+=x;n+=c;q[p]=(q[p]||0)+c});
+ return{per,tot,n,ps:Object.keys(q).map(p=>[+p,q[p]]).sort((a,b)=>b[1]*PM[b[0]][2]-a[1]*PM[a[0]][2])}}
+function render1(){
+ $("ta").classList.toggle("on",mode=="a");$("tb").classList.toggle("on",mode=="b");
+ $("cl").textContent=mode=="a"?"Calibers ≥ 20 km/h (lignes précises)":"Calibers ≥ 42 km/h (BOX entière)";
+ $("nt").textContent=mode=="a"?"Touchez un caliber pour l’ajouter ou le retirer. p = Kleen Skyburst (toutes directions).":"Touchez un caliber pour l’ajouter ou le retirer. Le caliber désactive toute sa BOX.";
+ const e=$("chips");e.innerHTML="";
+ LET[mode].forEach(l=>{const b=document.createElement("button");b.className="chip"+(on[mode].has(l)?" on":"");b.textContent=l;b.onclick=()=>{on[mode].has(l)?on[mode].delete(l):on[mode].add(l);render1()};e.appendChild(b)});
+ const r=calc(mode);
+ $("shows").innerHTML=C.s.map((s,i)=>`<div class="row"><span>${s}</span><span class="num">${r.per[i][1]} lignes</span><b>${fmt(r.per[i][0])} g</b></div>`).join("");
+ $("list1").innerHTML=r.ps.length?r.ps.map(([p,c])=>{const e=PM[p];return `<div class="r"><i class="sw" style="background:${bg(e)}"></i><div class="d"><div class="n">${esc(e[1])}</div><div class="m">${e[0]} · ${c} × ${fmt(e[2],2)} g</div></div><b class="rt">${fmt(c*e[2])} g</b></div>`}).join(""):'<p class="note">Aucun caliber sélectionné.</p>';
+ setHead()}
+/* ---------- onglet Produits ---------- */
+const qty=P.map(()=>0),els=[],KEY="dcol-calc-q2",list=$("list2");
+try{JSON.parse(localStorage.getItem(KEY)||"[]").forEach((v,i)=>{if(i<qty.length)qty[i]=+v||0})}catch(e){}
+G.forEach(c=>{
+ const sec=document.createElement("section");sec.innerHTML=`<h2><span>${gt(c)}</span><span class="s"></span></h2><div></div>`;
+ P.map((p,i)=>[p,i]).filter(x=>x[0][3]===c).sort((a,b)=>c==="D"?a[1]-b[1]:a[0][1].localeCompare(b[0][1])).forEach(([p,i])=>{
+  const r=document.createElement("div");r.className="r";
+  r.innerHTML=`<i class="sw" style="background:${bg(p)}"></i><div class="d"><div class="n"></div><div class="m"></div><div class="lt"></div></div><div class="q"><button data-d="-1" aria-label="Moins">−</button><input inputmode="numeric" pattern="[0-9]*" placeholder="0"><button data-d="1" aria-label="Plus">+</button></div>`;
+  r.querySelector(".n").textContent=p[1];r.querySelector(".m").textContent=p[0]+" · "+fmt(p[2],2)+" g/u"+(p[6]?" · "+p[6]:"");
+  r.dataset.i=i;r._t=norm(p[0]+" "+p[1]);sec.lastChild.appendChild(r);els[i]=r});
+ sec._c=c;list.appendChild(sec)});
+function upd(){const sub={};
+ P.forEach((p,i)=>{const q=qty[i],m=q*p[2],s=sub[p[3]]||(sub[p[3]]=[0,0]);s[0]+=q;s[1]+=m;
+  const r=els[i],inp=r.querySelector("input");r.classList.toggle("on",q>0);if(document.activeElement!==inp)inp.value=q||"";
+  r.querySelector(".lt").textContent=q?q+" × "+fmt(p[2],2)+" = "+fmt(m)+" g":""});
+ [...list.children].forEach(s=>{if(s._c)s.querySelector(".s").textContent=sub[s._c][0]?sub[s._c][0]+" u · "+fmt(sub[s._c][1])+" g":""});
+ try{localStorage.setItem(KEY,JSON.stringify(qty))}catch(e){}
+ setHead()}
+function filt(){
+ const t=norm($("q").value).split(/\s+/).filter(Boolean),only=$("only").checked;let any=0;
+ [...list.children].forEach(s=>{if(!s._c)return;let v=0;
+  s.querySelectorAll(".r").forEach(r=>{const ok=t.every(x=>r._t.includes(x))&&(!only||qty[r.dataset.i]>0);r.hidden=!ok;v+=ok});s.hidden=!v;any+=v});
+ let n=list.querySelector(".none");if(!any&&!n){n=document.createElement("p");n.className="none";n.textContent="Aucun produit ne correspond.";list.appendChild(n)}else if(any&&n)n.remove()}
+list.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=+b.closest(".r").dataset.i;qty[i]=Math.max(0,qty[i]+(+b.dataset.d));upd();if($("only").checked)filt()});
+list.addEventListener("input",e=>{const i=+e.target.closest(".r").dataset.i;qty[i]=Math.max(0,parseInt(e.target.value,10)||0);upd()});
+list.addEventListener("change",()=>{upd();filt()});
+$("q").oninput=filt;$("only").onchange=filt;
+/* ---------- en-tête commun ---------- */
+function setHead(){let g,tk,lab;
+ if(tab==1){const r=calc(mode);g=r.tot;tk=fmt(r.tot/1000,3)+" kg · "+r.n+" ligne"+(r.n>1?"s":"");lab="Calibers actifs · vent ≥ "+(mode=="a"?"20":"42")+" km/h"}
+ else{let n=0;g=0;P.forEach((p,i)=>{g+=qty[i]*p[2];n+=qty[i]});tk=fmt(g/1000,3)+" kg · "+n+" unité"+(n>1?"s":"");lab="Produits saisis"}
+ $("tg").textContent=fmt(g)+" g";$("tk").textContent=tk;$("tl").textContent="Total M.A. · "+lab}
+function show(t){tab=t;$("t1").classList.toggle("on",t==1);$("t2").classList.toggle("on",t==2);$("p1").hidden=t!=1;$("p2").hidden=t!=2;$("sb").hidden=t!=2;setHead();window.scrollTo(0,0)}
+$("t1").onclick=()=>show(1);$("t2").onclick=()=>show(2);
+$("ta").onclick=()=>{mode="a";render1()};$("tb").onclick=()=>{mode="b";render1()};
+$("rzc").onclick=()=>{auto();render1()};
+$("rz").onclick=()=>{if(tab==1){ds.clear();auto();drawDirs();render1()}else{if(qty.some(v=>v>0)&&!confirm("Effacer toutes les quantités ?"))return;qty.fill(0);upd();filt()}};
+/* ---------- export PDF (onglet actif) ---------- */
+function mkPdf(){const doc=new window.jspdf.jsPDF({unit:"mm",format:"a4"}),o={doc,y:16,M:14,R:196};
+ o.need=h=>{if(o.y+h>284){doc.addPage();o.y=16}};o.T=(t,x,a)=>doc.text(String(t),x,o.y,a||{});o.st=(s,b)=>{doc.setFont("helvetica",b?"bold":"normal");doc.setFontSize(s)};return o}
+function stamp(o,title){const d=new Date(),p=v=>String(v).padStart(2,"0");o.st(15,1);o.T(title,o.M);o.y+=6;o.st(9);o.T("Édité le "+p(d.getDate())+"/"+p(d.getMonth()+1)+"/"+d.getFullYear()+" à "+p(d.getHours())+":"+p(d.getMinutes()),o.M);o.y+=7}
+function pdf1(){const o=mkPdf(),{doc,M,R}=o,m=mode,r=calc(m),cl=LET[m].filter(l=>on[m].has(l));
+ stamp(o,"Cascade of Lights - Sélection de M.A.");
+ o.st(11,1);o.T("Vent à partir de "+(m=="a"?"20 km/h":"42 km/h (BOX entières)"),M);o.y+=6;
+ o.st(10);if(ds.size){o.T("Directions : "+[...ds].join(", "),M);o.y+=5}
+ o.T("Calibers : "+(cl.join(", ")||"aucun"),M);o.y+=8;
+ if(!r.n){o.st(10);o.T("Aucune ligne concernée.",M);return doc}
+ o.st(12,1);o.T("Total M.A. : "+pf(r.tot)+" g ("+pf(r.tot/1000,3)+" kg) - "+r.n+" lignes",M);o.y+=7;
+ o.st(9,1);o.T("Barge",M);o.T("Lignes",150,{align:"right"});o.T("M.A. (g)",R,{align:"right"});o.y+=1.5;doc.line(M,o.y,R,o.y);o.y+=4.5;o.st(9);
+ C.s.forEach((s,i)=>{if(!r.per[i][1])return;o.T(s,M);o.T(r.per[i][1],150,{align:"right"});o.T(pf(r.per[i][0]),R,{align:"right"});o.y+=5});
+ o.y+=4;o.need(14);o.st(8,1);o.T("Part number",M);o.T("Désignation",M+23);o.T("Qté",150,{align:"right"});o.T("M.A./u (g)",169,{align:"right"});o.T("Total (g)",R,{align:"right"});o.y+=1.5;doc.line(M,o.y,R,o.y);o.y+=4.5;o.st(8.5);
+ r.ps.forEach(([p,c])=>{const e=PM[p],ls=doc.splitTextToSize(e[1].replace(/™/g,""),100);o.need(ls.length*4+1);
+  ls.forEach((t,k)=>{if(!k){o.T(e[0],M);o.T(c,150,{align:"right"});o.T(pf(e[2],2),169,{align:"right"});o.T(pf(c*e[2]),R,{align:"right"})}o.T(t,M+23);o.y+=4});o.y+=0.8});
+ return doc}
+function pdf2(){const o=mkPdf(),{doc,M,R}=o;let g=0,n=0;P.forEach((p,i)=>{g+=qty[i]*p[2];n+=qty[i]});
+ stamp(o,"Cascade of Lights - Calcul de M.A. (produits)");
+ o.st(12,1);o.T("Total M.A. : "+pf(g)+" g ("+pf(g/1000,3)+" kg) - "+n+" unités",M);o.y+=8;
+ if(!n){o.st(10);o.T("Aucune quantité saisie.",M);return doc}
+ G.forEach(c=>{const L=P.map((p,i)=>[p,qty[i],i]).filter(x=>x[0][3]===c&&x[1]>0).sort((a,b)=>c==="D"?a[2]-b[2]:a[0][1].localeCompare(b[0][1]));if(!L.length)return;
+  const u=L.reduce((s,x)=>s+x[1],0),gg=L.reduce((s,x)=>s+x[1]*x[0][2],0);
+  o.need(18);o.st(11,1);o.T(gt(c)+" - "+u+" u - "+pf(gg)+" g",M);o.y+=1.5;doc.line(M,o.y,R,o.y);o.y+=4.5;
+  o.st(8,1);o.T("Part number",M+5);o.T("Désignation",M+27);o.T("Qté",150,{align:"right"});o.T("M.A./u (g)",169,{align:"right"});o.T("Total (g)",R,{align:"right"});o.y+=4.5;o.st(8.5);
+  L.forEach(([p,q])=>{const ls=doc.splitTextToSize(p[1].replace(/™/g,""),88);o.need(ls.length*4+1);
+   const rgb=h=>doc.setFillColor(parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16));doc.setDrawColor(120);
+   if(p[5]){rgb(p[4]||"FFFFFF");doc.rect(M,o.y-2.6,1.5,3,"FD");rgb(p[5]);doc.rect(M+1.5,o.y-2.6,1.5,3,"FD")}else{p[4]?rgb(p[4]):doc.setFillColor(255,255,255);doc.rect(M,o.y-2.6,3,3,"FD")}
+   ls.forEach((t,k)=>{if(!k){o.T(p[0],M+5);o.T(q,150,{align:"right"});o.T(pf(p[2],2),169,{align:"right"});o.T(pf(q*p[2]),R,{align:"right"})}o.T(t,M+27);o.y+=4});o.y+=0.8});
+  o.y+=5});
+ return doc}
+let dl=null;try{window.claude&&claude.use("downloads").then(d=>{dl=d}).catch(()=>{})}catch(e){}
+$("pdf").onclick=async()=>{if(!window.jspdf){window.print();return}
+ try{const doc=tab==1?pdf1():pdf2(),name=tab==1?"DCOL_selection_calibers.pdf":"DCOL_calcul_produits.pdf";
+  if(dl)await dl.save({filename:name,data:doc.output("arraybuffer")});
+  else{const a=document.createElement("a");a.href=URL.createObjectURL(doc.output("blob"));a.download=name;document.body.appendChild(a);a.click();a.remove()}}
+ catch(e){if(!e||e.code!=="declined")alert("Export PDF impossible.")}};
+auto();drawDirs();render1();upd();filt();show(1);
+</script></body></html>
